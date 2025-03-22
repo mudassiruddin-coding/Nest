@@ -17,7 +17,31 @@ SECRET_KEY = "vs0a0lw!i!()b%zrid#20ipxei)7gf*5@vl_^8^ilk06^m6@%6"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["*"]
+CSRF_TRUSTED_ORIGINS = [
+    "https://nest-production-ef01.up.railway.app",
+    "https://www.nest-production-ef01.up.railway.app",
+]
+
+
+ALLOWED_HOSTS = [
+    "nest-production-ef01.up.railway.app",
+    "www.nest-production-ef01.up.railway.app",
+    ]
+
+# Redirect all HTTP requests to HTTPS
+SECURE_SSL_REDIRECT = True
+
+# Enable HTTP Strict Transport Security (HSTS)
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+# Secure Cookies
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+
+
 
 # settings.py
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -42,6 +66,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # Add this line
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -50,6 +75,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.gzip.GZipMiddleware",
 ]
+
 
 ROOT_URLCONF = "djangoblog.urls"
 
@@ -188,4 +214,4 @@ if os.environ.get("AWS_ACCESS_KEY_ID"):  # pragma:no cover
     AWS_IS_GZIPPED = True
     AWS_DEFAULT_ACL = None
     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-    STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
